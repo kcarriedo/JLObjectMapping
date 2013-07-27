@@ -1,0 +1,8 @@
+//
+// Prefix header for all source files of the 'JLJSONMapping' target in the 'JLJSONMapping' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+    #import "NSObject+JLJSONMapping.h"
+#endif
