@@ -210,8 +210,6 @@
 				B3A6C16F179B99A5009A8472 /* JLObjectDeserializer.m */,
 				B3A56C321749C94100C42451 /* JLObjectSerializer.h */,
 				B3A56C331749C94100C42451 /* JLObjectSerializer.m */,
-				B3A6C1FB179D1107009A8472 /* JLObjectMappingUtils.h */,
-				B3A6C1FC179D1107009A8472 /* JLObjectMappingUtils.m */,
 				B3A3174E17A0EDAB0070480A /* JLTranscodingBase.h */,
 				B3A3174F17A0EDAB0070480A /* JLTranscodingBase.m */,
 			);
@@ -221,6 +219,8 @@
 		B3A3174D17A0EAC20070480A /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				B3A6C1FB179D1107009A8472 /* JLObjectMappingUtils.h */,
+				B3A6C1FC179D1107009A8472 /* JLObjectMappingUtils.m */,
 				B398E3FE179EDD4900113BFC /* JLTimer.h */,
 				B398E3FF179EDD4900113BFC /* JLTimer.m */,
 			);
