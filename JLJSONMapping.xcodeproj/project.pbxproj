@@ -18,6 +18,7 @@
 		B32198C81749A14200066DA7 /* NSObject+JLJSONMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = B32198C61749A14200066DA7 /* NSObject+JLJSONMapping.m */; };
 		B32198CB1749A19300066DA7 /* JLObjectMapper.m in Sources */ = {isa = PBXBuildFile; fileRef = B32198CA1749A19300066DA7 /* JLObjectMapper.m */; };
 		B32198CC1749A19300066DA7 /* JLObjectMapper.m in Sources */ = {isa = PBXBuildFile; fileRef = B32198CA1749A19300066DA7 /* JLObjectMapper.m */; };
+		B34A932E17B5FAC90036910D /* SimpleTestMappingObject.m in Sources */ = {isa = PBXBuildFile; fileRef = B34A932D17B5FAC90036910D /* SimpleTestMappingObject.m */; };
 		B398E400179EDD4900113BFC /* JLTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = B398E3FF179EDD4900113BFC /* JLTimer.m */; };
 		B398E401179EDD4900113BFC /* JLTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = B398E3FF179EDD4900113BFC /* JLTimer.m */; };
 		B3A3175017A0EDAB0070480A /* JLTranscodingBase.m in Sources */ = {isa = PBXBuildFile; fileRef = B3A3174F17A0EDAB0070480A /* JLTranscodingBase.m */; };
@@ -73,6 +74,8 @@
 		B32198C61749A14200066DA7 /* NSObject+JLJSONMapping.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+JLJSONMapping.m"; sourceTree = "<group>"; };
 		B32198C91749A19300066DA7 /* JLObjectMapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLObjectMapper.h; sourceTree = "<group>"; };
 		B32198CA1749A19300066DA7 /* JLObjectMapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLObjectMapper.m; sourceTree = "<group>"; };
+		B34A932C17B5FAC90036910D /* SimpleTestMappingObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleTestMappingObject.h; sourceTree = "<group>"; };
+		B34A932D17B5FAC90036910D /* SimpleTestMappingObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleTestMappingObject.m; sourceTree = "<group>"; };
 		B398E3FE179EDD4900113BFC /* JLTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLTimer.h; sourceTree = "<group>"; };
 		B398E3FF179EDD4900113BFC /* JLTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLTimer.m; sourceTree = "<group>"; };
 		B3A3174E17A0EDAB0070480A /* JLTranscodingBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLTranscodingBase.h; sourceTree = "<group>"; };
@@ -238,6 +241,8 @@
 				B3A3175317A454170070480A /* AnotherSimpleTestObject.m */,
 				B3A3175617A457010070480A /* ObjectAmbiguousType.h */,
 				B3A3175717A457010070480A /* ObjectAmbiguousType.m */,
+				B34A932C17B5FAC90036910D /* SimpleTestMappingObject.h */,
+				B34A932D17B5FAC90036910D /* SimpleTestMappingObject.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -368,6 +373,7 @@
 				B3A3175117A0EDAB0070480A /* JLTranscodingBase.m in Sources */,
 				B3A3175517A454170070480A /* AnotherSimpleTestObject.m in Sources */,
 				B3A3175817A457010070480A /* ObjectAmbiguousType.m in Sources */,
+				B34A932E17B5FAC90036910D /* SimpleTestMappingObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

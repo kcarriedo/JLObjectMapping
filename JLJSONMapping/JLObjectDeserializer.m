@@ -107,10 +107,8 @@
     id newObject = [[class alloc] init];
     NSDictionary *collectedProperties = [self collectPropertiesOfClass:class];
     if ([collectedProperties count]== 0 && obj){
-        NSLog(@"huh? Class: %@", [obj class]);
-        if (class == [NSDate class]){
-            
-        }
+        //I shouldn't have gotten here, maybe passing in NSDate will do it?
+         [NSException raise:@"Class has no properties, can't deserialize" format:@"Class %@ missing properties", class];
     }
     if ([collectedProperties count]>0 && obj){
         NSArray *extras = [self reportExtraJSONFields:obj classProperties:collectedProperties];
@@ -125,20 +123,30 @@
             }
         }
     }
-    
+    NSDictionary *propertyNameMap = [class propertyNameMap];
     [collectedProperties enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
         NSString *propertyProperties = value;
-        NSString *propertyNameKey = key;
+        NSString *JSONpropertyNameKey = [propertyNameMap objectForKey:key];
+        NSString *objectPropertyName = key;
+        //if we have no overrides, just assume JSON field names match property names
+        if (!JSONpropertyNameKey)
+        {
+            JSONpropertyNameKey = key;
+        }
         Class propertyType = [JLObjectMappingUtils classFromPropertyProperties:propertyProperties];
         if (!propertyType){
             if ([JLObjectMappingUtils isValueType:propertyProperties]){
-                id propertyValue = [obj objectForKey:propertyNameKey];
+                id propertyValue = [obj objectForKey:JSONpropertyNameKey];
                 if (propertyValue){
-                    [newObject setValue:propertyValue forKey:propertyNameKey];
+                    [newObject setValue:propertyValue forKey:objectPropertyName];
                 }
             }
         }else{
-            [self transcodeProperty:obj propertyName:propertyNameKey propertyType:propertyType owningObject:newObject];
+            [self transcodeProperty:obj
+                 objectPropertyName:objectPropertyName
+                   JSONpropertyName:JSONpropertyNameKey
+                       propertyType:propertyType
+                       owningObject:newObject];
         }
         
     }];
@@ -149,14 +157,14 @@
 
 #pragma mark - Object transcoding methods
 - (void) transcodeArrayProperty:(NSArray *) array
-                   propertyName:(NSString *) propertyName
+             objectPropertyName:(NSString *) objectPropertyName
                    owningObject:(id) newObject
 {
     if (array && [array count] >0){
         NSDictionary *propertyMappings = [[newObject class] propertyTypeMap];
         NSMutableArray *newArray = [[NSMutableArray alloc] initWithCapacity:[array count]];
-        [newObject setValue:newArray forKey:propertyName];
-        Class arrayObjectType = [propertyMappings objectForKey:propertyName];
+        [newObject setValue:newArray forKey:objectPropertyName];
+        Class arrayObjectType = [propertyMappings objectForKey:objectPropertyName];
         if (arrayObjectType){
             for (id someObject in array) {
                 id object = [self objectWithJSONObject:someObject targetClass:arrayObjectType];
@@ -165,7 +173,7 @@
         }else {
             if (optionMask & JLDeserializerErrorOnAmbiguousType)
             {
-                [NSException raise:@"Ambiguous array of objects, missing propertyTypeMap for property" format:@"Property name:%@", propertyName];
+                [NSException raise:@"Ambiguous array of objects, missing propertyTypeMap for property" format:@"Property name:%@", objectPropertyName];
             }
             for (id someObject in array) {
                 if ([JLObjectMappingUtils isBasicType:someObject]){
@@ -178,26 +186,26 @@
 
 //Transcode a dictionary, either a JSON dictionary (appropriate for NSJSONSerialization) or a dictionary that contains model objects.
 - (void) transcodeDictionaryProperty:(NSDictionary *) dict
-                        propertyName:(NSString *) propertyName
+                  objectPropertyName:(NSString *) objectPropertyName
                      dictionaryClass:(Class) type
                         owningObject:(id) newObject
 {
     if (![type isSubclassOfClass:[NSDictionary class]])
     {
         id someObject = [self objectWithJSONObject:dict targetClass:type];
-        [newObject setValue:someObject forKey:propertyName];
+        [newObject setValue:someObject forKey:objectPropertyName];
     }
     else if (dict && [dict count] >0){
         NSDictionary *propertyMappings = [[newObject class] propertyTypeMap];
         NSMutableDictionary *newDictionary = [[NSMutableDictionary alloc] initWithCapacity:[dict count]];
-        [newObject setValue:newDictionary forKey:propertyName];
-        Class dictionaryObjectType = [propertyMappings objectForKey:propertyName];
+        [newObject setValue:newDictionary forKey:objectPropertyName];
+        Class dictionaryObjectType = [propertyMappings objectForKey:objectPropertyName];
         if (!dictionaryObjectType)
         {
             //we've gone down the tree to the leaves and transcoded. Now just set objects.
             if (optionMask & JLDeserializerErrorOnAmbiguousType)
             {
-                [NSException raise:@"Ambiguous dictionary of objects, missing propertyTypeMap for property" format:@"Property name:%@", propertyName];
+                [NSException raise:@"Ambiguous dictionary of objects, missing propertyTypeMap for property" format:@"Property name:%@", objectPropertyName];
             }
             dictionaryObjectType = type;
             [dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -221,42 +229,47 @@
  Given a property name, the type it should be, and the parent who owns this property, it will transcode your jsonObject (array, or dictionary representation) into the expected property value
  */
 - (void) transcodeProperty:(id)jsonObject
-              propertyName:(NSString *) propertyName
+              objectPropertyName:(NSString *) objectPropertyName
+              JSONpropertyName:(NSString *) JSONpropertyName
               propertyType:(Class) type
               owningObject:(id) newObject
 {
-    id propertyValue = [jsonObject objectForKey:propertyName];
+    id propertyValue = [jsonObject objectForKey:JSONpropertyName];
     //bail on null
-    if ([propertyValue isKindOfClass:[NSNull class]] ){
-        [newObject setValue:nil forKey:propertyName];
+    if ([propertyValue isKindOfClass:[NSNull class]] || propertyValue == nil){
+        [newObject setValue:nil forKey:objectPropertyName];
         return;
     }
     
     if ([propertyValue isKindOfClass:[NSArray class]]){
         [self transcodeArrayProperty:propertyValue
-                        propertyName:propertyName
+                  objectPropertyName:objectPropertyName
                         owningObject:newObject];
         
     }else if ([propertyValue isKindOfClass:[NSDictionary class]] && type){
         [self transcodeDictionaryProperty:propertyValue
-                             propertyName:propertyName
+                       objectPropertyName:objectPropertyName
                           dictionaryClass:type
                              owningObject:newObject];
         
     }else if ([type isSubclassOfClass:[NSDate class]]){
-        NSDateFormatter *df = [[newObject class] dateFormatterForPropertyNamed:propertyName];
-        [newObject setValue:[df dateFromString:propertyValue] forKey:propertyName];
+        NSDateFormatter *df = [[newObject class] dateFormatterForPropertyNamed:objectPropertyName];
+        [newObject setValue:[df dateFromString:propertyValue] forKey:objectPropertyName];
         
     }else if ([JLObjectMappingUtils isBasicType:propertyValue]){
-        [newObject setValue:propertyValue forKey:propertyName];
+        [newObject setValue:propertyValue forKey:objectPropertyName];
         
     }else if (propertyValue){
-        [self transcodeProperty:propertyValue propertyName:propertyName propertyType:type owningObject:newObject];
+        [self transcodeProperty:propertyValue
+             objectPropertyName:objectPropertyName
+               JSONpropertyName:JSONpropertyName
+                   propertyType:type
+                   owningObject:newObject];
         
     }else{
         if (optionMask & JLDeserializerReportNilProperties)
         {
-            NSLog(@"Expected property value for property %@ of type %@ was missing in JSON", propertyName, type);
+            NSLog(@"Expected property value for property %@ of type %@ had no matching property %@ in the JSON", objectPropertyName, JSONpropertyName, type);
         }
     }
 }
