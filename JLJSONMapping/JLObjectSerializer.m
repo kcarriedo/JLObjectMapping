@@ -72,6 +72,9 @@
     }else if ([object class] == [NSDate class]){
         NSDateFormatter *dateFormatter = [[object class] dateFormatterForPropertyNamed:nil];
         returnObject = [dateFormatter stringFromDate:(NSDate *)object];
+    }else if ([JLObjectMappingUtils isBasicType:object]){
+        //we have a simple object that can be trancoded by NSJSONSerialization so just return it
+        returnObject = object;
     }else{
         returnObject = [self dictionaryFromObject:object];
     }    
@@ -159,6 +162,7 @@
     [timer recordTime:[NSString stringWithFormat:@"Super class:%@",[[obj class] superclass]]];
     [obj willSerialize];
     NSMutableDictionary *newJSONDictionary = [NSMutableDictionary dictionary];
+    NSDictionary *propertyNameMap = [[obj class] propertyNameMap];
     if (propertySet)
     {
         [propertySet enumerateObjectsUsingBlock:^(id propertyKey, BOOL *stop) {
@@ -179,6 +183,12 @@
                     propertyJSONValue = [self dictionaryFromObject:propertyJSONValue];
                 }
                 if (propertyJSONValue){
+                    NSString *jsonFieldName = [propertyNameMap objectForKey:propertyKey];
+                    if (jsonFieldName)
+                    {
+                        //if we have a property name to JSON field mapping, use it
+                        propertyKey = jsonFieldName;
+                    }
                     [newJSONDictionary setObject:propertyJSONValue forKey:propertyKey];
                 }
             }else
