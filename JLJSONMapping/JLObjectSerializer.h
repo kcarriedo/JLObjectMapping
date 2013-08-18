@@ -10,11 +10,11 @@
 #import "JLObjectMapper.h"
 #import "JLTranscodingBase.h"
 
-typedef enum {
+typedef NS_OPTIONS(NSInteger, JLSerializerOptionMask) {
     JLSerializerVerboseOutput = 1 << 0,
     JLSerializerReportTimers = 1 << 1,
     JLSerializerDefaultOptionsMask = 0x0
-} JLSerializerOptionMask;
+};
 
 @interface JLObjectSerializer : JLTranscodingBase
 

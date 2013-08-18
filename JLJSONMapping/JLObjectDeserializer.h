@@ -10,15 +10,15 @@
 #import "JLObjectMapper.h"
 #import "JLTranscodingBase.h"
 
-typedef enum {
+typedef NS_OPTIONS(NSInteger, JLDeserializerOptionMask) {
     JLDeserializerIgnoreMissingProperties = 1 << 0,
     JLDeserializerErrorOnAmbiguousType = 1 << 1,    //This should be used for development only
     JLDeserializerReportMissingProperties = 1 << 2,
     JLDeserializerReportNilProperties = 1 << 3,     //Good for development as well
     JLDeserializerReportTimers = 1 << 4,
     JLDeserializerVerboseOutput = 1 << 5,
-    JLDeserializerDefaultOptionMask = JLDeserializerReportMissingProperties |JLDeserializerIgnoreMissingProperties | JLDeserializerReportTimers | JLDeserializerReportNilProperties
-} JLDeserializerOptionMask;
+    JLDeserializerDefaultOptionMask = JLDeserializerReportMissingProperties | JLDeserializerIgnoreMissingProperties | JLDeserializerReportTimers | JLDeserializerReportNilProperties
+};
 
 @interface JLObjectDeserializer : JLTranscodingBase
 
