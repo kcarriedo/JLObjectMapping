@@ -113,11 +113,11 @@
     if ([collectedProperties count]>0 && obj){
         NSArray *extras = [self reportExtraJSONFields:obj classProperties:collectedProperties];
         if ([extras count]>0){
-            if (optionMask & JLDeserializerReportMissingProperties)
+            if ((optionMask & JLDeserializerReportMissingProperties) != NO)
             {
                 NSLog(@"JSON object representing a %@ contained extra field(s):%@\n full object graph:\n%@", class, extras, obj);
             }
-            if (!(optionMask & JLDeserializerIgnoreMissingProperties))
+            if ((optionMask & JLDeserializerIgnoreMissingProperties) == NO)
             {
                 [NSException raise:@"JSON to Object mismatch, JSON has extra fields" format:@"Class %@ missing properties: %@", class, extras];
             }
@@ -171,7 +171,7 @@
                 [newArray addObject:object];
             }
         }else {
-            if (optionMask & JLDeserializerErrorOnAmbiguousType)
+            if ((optionMask & JLDeserializerErrorOnAmbiguousType) != NO)
             {
                 [NSException raise:@"Ambiguous array of objects, missing propertyTypeMap for property" format:@"Property name:%@", objectPropertyName];
             }
@@ -203,7 +203,7 @@
         if (!dictionaryObjectType)
         {
             //we've gone down the tree to the leaves and transcoded. Now just set objects.
-            if (optionMask & JLDeserializerErrorOnAmbiguousType)
+            if ((optionMask & JLDeserializerErrorOnAmbiguousType) != NO)
             {
                 [NSException raise:@"Ambiguous dictionary of objects, missing propertyTypeMap for property" format:@"Property name:%@", objectPropertyName];
             }
@@ -267,7 +267,7 @@
                    owningObject:newObject];
         
     }else{
-        if (optionMask & JLDeserializerReportNilProperties)
+        if ((optionMask & JLDeserializerReportNilProperties) != NO)
         {
             NSLog(@"Expected property value for property %@ of type %@ had no matching property %@ in the JSON", objectPropertyName, JSONpropertyName, type);
         }

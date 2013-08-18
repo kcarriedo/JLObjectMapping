@@ -203,12 +203,12 @@
 #pragma mark - Serialization options
 -(BOOL) isVerbose
 {
-    return (optionMask & JLSerializerVerboseOutput);
+    return (optionMask & JLSerializerVerboseOutput) != NO;
 }
 
 -(BOOL) isReportTimers
 {
-    return (optionMask & JLSerializerReportTimers);
+    return (optionMask & JLSerializerReportTimers) != NO;
 }
 
 #pragma mark - generic class stuff
