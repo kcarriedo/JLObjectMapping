@@ -18,7 +18,7 @@ You're done.
 Implement this method in your model object if your objects have properties that are arrays or dictionaries. This is because you'll need to tell the deserializer what class you expect the objects to be when it's done. An example would be if you have an NSArray named "people". A single person might be a JLPerson object. So you'd return: @{@"people":[JLPerson class]} from this method.
 
  
-**NOT IMPLEMENTED YET \+ (NSDictionary *)propertyNameMap;**
+**\+ (NSDictionary *)propertyNameMap;**
 Implement this method if your JSON objects have properties that map to different names on your model object. An example would be if you have a property on your model named "firstname" but the JSON representation was "first", you'd return: @{@"firstname":@"first"} from this method.
 
 
