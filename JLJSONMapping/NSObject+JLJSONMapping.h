@@ -40,6 +40,8 @@
  
  This allows you to return a custom date formatter for any given property on the object.
  Default locale: @"en_US_POSIX", default format string: @"MM-dd-yyyy 'T'HH:mm:ss.SSS Z"
+ When overriding, it's important to use a dispatch_once call to create your date formatter, they are very expensive
+ and this method is likely to be called many times.
  
  @param propertyName Name of the property that is a NSDate and needs a custom format
  @return Returns a date formatter for your property named 'propertyName'

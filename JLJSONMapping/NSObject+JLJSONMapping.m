@@ -11,14 +11,17 @@
 
 @implementation NSObject (JLJSONMapping)
 
-
 + (NSDateFormatter *)dateFormatterForPropertyNamed:(NSString*)propertyName
 {
     //ignoring propertyName
-    NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"MM-dd-yyyy 'T'HH:mm:ss.SSS Z"];
-    [dateFormatter setLocale:locale];
+    static dispatch_once_t once;
+    static id dateFormatter;
+    dispatch_once(&once, ^{
+        dateFormatter = [[NSDateFormatter alloc] init];
+        NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
+        [dateFormatter setDateFormat:@"MM-dd-yyyy 'T'HH:mm:ss.SSS Z"];
+        [dateFormatter setLocale:locale];
+    });
     return dateFormatter;
 }
 
