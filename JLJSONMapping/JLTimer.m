@@ -10,10 +10,9 @@
 
 @implementation JLTimer
 {
-    NSString *timerName;
-    CFAbsoluteTime startTime;
-    CFAbsoluteTime totalTime;
-
+    NSString *_timerName;
+    CFAbsoluteTime _startTime;
+    CFAbsoluteTime _totalTime;
 }
 
 - (id)initWithStartTimerName:(NSString *)name
@@ -21,32 +20,32 @@
     self = [super init];
     if (self)
     {
-        totalTime = 0.0f;
-        timerName = name;
-        startTime = CFAbsoluteTimeGetCurrent();
+        _totalTime = 0.0f;
+        _timerName = name;
+        _startTime = CFAbsoluteTimeGetCurrent();
         NSLog(@"Timer: %@, Start", name);
     }
     return self;
 }
 
-- (void)recordTime:(NSString *) message
+- (void)recordTime:(NSString *)message
 {
     CFAbsoluteTime endTime = CFAbsoluteTimeGetCurrent();
-    CFAbsoluteTime taskTime = (endTime - startTime);
-    totalTime += taskTime;
+    CFAbsoluteTime taskTime = (endTime - _startTime);
+    _totalTime += taskTime;
     if (message)
     {
-        NSLog(@"Timer: %@, %f,%@", timerName, taskTime, message);
+        NSLog(@"Timer: %@, %f,%@", _timerName, taskTime, message);
     } else{
-        NSLog(@"Timer: %@, %f", timerName, taskTime);
+        NSLog(@"Timer: %@, %f", _timerName, taskTime);
     }
     //reset for next recording
-    startTime = endTime;
+    _startTime = endTime;
 }
 
-- (CFAbsoluteTime) totalElapsedTime
+- (CFAbsoluteTime)totalElapsedTime
 {
-    return totalTime;
+    return _totalTime;
 }
 
 @end

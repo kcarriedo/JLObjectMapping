@@ -10,7 +10,7 @@
 
 @implementation SimpleTestObject
 
-+ (SimpleTestObject*) newSimpleTestObject
++ (SimpleTestObject*)newSimpleTestObject
 {
     SimpleTestObject *testObject = [[SimpleTestObject alloc] init];
     [testObject setBoolean:YES];

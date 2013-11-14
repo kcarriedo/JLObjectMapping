@@ -10,6 +10,6 @@
 
 @interface AnotherSimpleTestObject : NSObject
 
-@property (nonatomic) NSInteger someInt;
+@property (nonatomic)NSInteger someInt;
 
 @end

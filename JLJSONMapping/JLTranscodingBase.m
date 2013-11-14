@@ -12,14 +12,14 @@
 @implementation JLTranscodingBase
 
 #pragma mark - abstract methods, override these
-- (BOOL) isReportTimers
+- (BOOL)isReportTimers
 {
     //implementer should override this
     NSLog(@"isReportTimers response coming from base class, this is probably not intentional.");
     return YES;
 }
 
-- (BOOL) isVerbose
+- (BOOL)isVerbose
 {
     //implementer should override this
     NSLog(@"isVerbose response coming from base class, this is probably not intentional.");

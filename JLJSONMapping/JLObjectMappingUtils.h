@@ -10,7 +10,7 @@
 
 @interface JLObjectMappingUtils : NSObject
 
-+ (Class) classFromPropertyProperties:(NSString*) propertiesString;
-+ (BOOL) isBasicType:(id)obj;
-+ (BOOL) isValueType:(NSString *) propertyProperties;
++ (Class)classFromPropertyProperties:(NSString *)propertiesString;
++ (BOOL)isBasicType:(id)obj;
++ (BOOL)isValueType:(NSString *)propertyProperties;
 @end

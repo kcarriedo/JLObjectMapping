@@ -23,7 +23,7 @@ This allows you to transcode a string containing JSON into an object of any give
  @return Returns a new object of type 'class' based on the date from 'objectString' or 'nil' on failure
  */
 
--(id) objectWithString:(NSString *) objectString targetClass:(Class) class;
+- (id)objectWithString:(NSString *)objectString targetClass:(Class)class;
 
 
 /** Return a new object of type 'class' using the data from the JSONObject 'obj'
@@ -35,7 +35,7 @@ This allows you to transcode a string containing JSON into an object of any give
  @return Returns a new object of type 'class' based on the date from 'obj' or 'nil' on failure
  */
 
--(id) objectWithJSONObject:(id) obj targetClass:(Class) class;
+- (id)objectWithJSONObject:(id)obj targetClass:(Class)class;
 
 
 ///---------------------------------------------------------------------------------------
@@ -50,7 +50,7 @@ This allows you to transcode a string containing JSON into an object of any give
  @return Returns a NSString that represents the object passed in or 'nil' on failure.
  */
 
--(NSString *)JSONStringWithObject:(NSObject *)object;
+- (NSString *)JSONStringWithObject:(NSObject *)object;
 
 
 /** Return a JSON object that represents the normal model object passed in.
@@ -62,6 +62,6 @@ This allows you to transcode a string containing JSON into an object of any give
  The JSON object can be either an NSDictionary, NSArray, or an NSString
  */
 
--(id)JSONObjectWithObject:(NSObject *)object;
+- (id)JSONObjectWithObject:(NSObject *)object;
 
 @end

@@ -14,8 +14,8 @@
 @interface JLTranscodingBase : NSObject
 
 - (JLTimer *)timerForMethodNamed:(NSString *)methodName;
-- (BOOL) isReportTimers;
-- (BOOL) isVerbose;
-- (void) logVerbose:(NSString *)message;
+- (BOOL)isReportTimers;
+- (BOOL)isVerbose;
+- (void)logVerbose:(NSString *)message;
 
 @end

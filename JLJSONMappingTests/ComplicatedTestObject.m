@@ -11,7 +11,7 @@
 
 @implementation ComplicatedTestObject
 
-+ (ComplicatedTestObject*) newComplicatedTestObject
++ (ComplicatedTestObject*)newComplicatedTestObject
 {
     ComplicatedTestObject *object = [[ComplicatedTestObject alloc] init];
     [object setSimpleTestObject:[SimpleTestObject newSimpleTestObject]];

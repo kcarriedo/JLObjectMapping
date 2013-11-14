@@ -10,12 +10,12 @@
 
 @class SimpleTestObject;
 @interface ComplicatedTestObject : NSObject
-@property (nonatomic, strong) SimpleTestObject *simpleTestObject;
-@property (nonatomic, strong) NSArray *arrayOfSimpleTestObjects;
-@property (nonatomic, strong) NSSet *setOfSimpleTestObjects;
-@property (nonatomic, strong) NSDictionary *dictionaryOfSimpleTestObjects;
+@property (nonatomic, strong)SimpleTestObject *simpleTestObject;
+@property (nonatomic, strong)NSArray *arrayOfSimpleTestObjects;
+@property (nonatomic, strong)NSSet *setOfSimpleTestObjects;
+@property (nonatomic, strong)NSDictionary *dictionaryOfSimpleTestObjects;
 
-+ (ComplicatedTestObject*) newComplicatedTestObject;
++ (ComplicatedTestObject*)newComplicatedTestObject;
 
 - (SimpleTestObject *)simpleObjectWithIntegerValue:(NSInteger)value;
 

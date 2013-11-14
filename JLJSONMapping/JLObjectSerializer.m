@@ -24,7 +24,7 @@
 }
 @synthesize serializableClasses;
 
--(id)initWithSerializerOptions:(JLSerializerOptionMask)options
+- (id)initWithSerializerOptions:(JLSerializerOptionMask)options
 {
     self = [super init];
     if (self)
@@ -35,7 +35,7 @@
     return self;
 }
 
--(id)init
+- (id)init
 {
     self = [super init];
     if (self)
@@ -50,7 +50,7 @@
 #pragma mark - API
 
 //primary entry point (api, sorts out object)
--(NSString *)JSONStringWithObject:(NSObject *)object
+- (NSString *)JSONStringWithObject:(NSObject *)object
 {
     id jsonObject = [self JSONObjectWithObject:object];
     NSError *error;
@@ -60,7 +60,7 @@
 }
 
 //primary entry point (api, sorts out object)
--(id)JSONObjectWithObject:(NSObject *)object
+- (id)JSONObjectWithObject:(NSObject *)object
 {
     id returnObject;
     if ([object isKindOfClass:[NSDictionary class]]){
@@ -83,7 +83,7 @@
 
 #pragma mark - 
 
--(NSArray *)arrayFromObjectArray:(NSArray *)array
+- (NSArray *)arrayFromObjectArray:(NSArray *)array
 {
     NSMutableArray *jsonArray = [[NSMutableArray alloc] initWithCapacity:[array count]];
     [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -93,7 +93,7 @@
     return jsonArray;
 }
 
--(NSArray *)arrayFromObjectSet:(NSSet *)set
+- (NSArray *)arrayFromObjectSet:(NSSet *)set
 {
     NSMutableArray *jsonArray = [[NSMutableArray alloc] initWithCapacity:[set count]];
     [set enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
@@ -103,7 +103,7 @@
     return jsonArray;
 }
 
--(NSDictionary *)dictionaryFromObjectDictionary:(NSDictionary *)dictionary
+- (NSDictionary *)dictionaryFromObjectDictionary:(NSDictionary *)dictionary
 {
     NSMutableDictionary *jsonDictionary = [[NSMutableDictionary alloc] init];
     [dictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -114,7 +114,7 @@
 }
 
 
--(NSSet *) loadPropertyMapForClass:(Class) class
+- (NSSet *)loadPropertyMapForClass:(Class)class
 {
     JLTimer *timer = [self timerForMethodNamed:@"loadPropertyMapForClass"];
     unsigned count;
@@ -141,7 +141,7 @@
 }
 
 
--(NSDictionary *)dictionaryFromObject:(NSObject *)obj
+- (NSDictionary *)dictionaryFromObject:(NSObject *)obj
 {
     if (!obj){
         return nil;
@@ -201,19 +201,19 @@
 }
 
 #pragma mark - Serialization options
--(BOOL) isVerbose
+- (BOOL)isVerbose
 {
     return (optionMask & JLSerializerVerboseOutput) != NO;
 }
 
--(BOOL) isReportTimers
+- (BOOL)isReportTimers
 {
     return (optionMask & JLSerializerReportTimers) != NO;
 }
 
 #pragma mark - generic class stuff
 
--(void)dealloc
+- (void)dealloc
 {
     classPropertiesNameMap = nil;
 }

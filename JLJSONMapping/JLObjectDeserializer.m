@@ -16,7 +16,7 @@
     JLDeserializerOptionMask optionMask;
 }
 
--(id) initWithDeserializerOptions:(JLDeserializerOptionMask) options
+- (id)initWithDeserializerOptions:(JLDeserializerOptionMask)options
 {
     self = [super init];
     if (self)
@@ -26,7 +26,7 @@
     return self;    
 }
 
--(id) init
+- (id)init
 {
     self = [super init];
     if (self)
@@ -36,35 +36,31 @@
     return self;
 }
 
--(id) objectWithJSONObject:(id) obj targetClass:(Class) class
+- (id)objectWithJSONObject:(id)obj targetClass:(Class)class
 {
     if ([obj isKindOfClass:[NSDictionary class]]){
         return [self newObjectFromJSONDictionary:obj targetClass:class];
     }else if ([obj isKindOfClass:[NSArray class]]){
         return [self newArrayObjectFromJSONArray:obj targetClass:class];
-        
-        //Need to add set processing
+        ///TODO:Need to add set processing
     }else{
         NSLog(@"Got object of type %@. That's not an NSArray or NSDictionary. Your code is bad and you should fix it. Returning nil for now, in the future this might cause a crash.", NSStringFromClass(class));
     }
     return nil;
 }
 
--(id) objectWithString:(NSString *) objectString targetClass:(Class) class
+- (id)objectWithString:(NSString *)objectString targetClass:(Class)class
 {
     NSError *error;
     id jsonObject = [NSJSONSerialization JSONObjectWithData:[objectString dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&error];
     if (error){
         [NSException raise:@"JSON string probably not properyly formed" format:@"JSON String: %@", objectString];
     }
-
     return [self objectWithJSONObject:jsonObject targetClass:class];
 }
 
-
-
 #pragma mark - JSON to Object utility methods, the guts of the transcoding
--(id)newArrayObjectFromJSONArray:(NSArray *)obj targetClass:(Class)class
+- (id)newArrayObjectFromJSONArray:(NSArray *)obj targetClass:(Class)class
 {
     NSMutableArray *objectArray = [[NSMutableArray alloc] initWithCapacity:[obj count]];
     for (id object in obj) {
@@ -75,7 +71,7 @@
 }
 
 //Collects the properties of the super classes then collects the current class', overwriting any duplicates with subclassed versions
--(NSMutableDictionary *)collectPropertiesOfClass:(Class) class
+- (NSMutableDictionary *)collectPropertiesOfClass:(Class)class
 {
     unsigned count;
     NSMutableDictionary *collectedProperties = [[NSMutableDictionary alloc] init];
@@ -102,7 +98,7 @@
 
 
 
--(id)newObjectFromJSONDictionary:(NSDictionary *)obj targetClass:(Class)class
+- (id)newObjectFromJSONDictionary:(NSDictionary *)obj targetClass:(Class)class
 {
     id newObject = [[class alloc] init];
     NSDictionary *collectedProperties = [self collectPropertiesOfClass:class];
@@ -154,11 +150,10 @@
     return newObject;
 }
 
-
 #pragma mark - Object transcoding methods
-- (void) transcodeArrayProperty:(NSArray *) array
-             objectPropertyName:(NSString *) objectPropertyName
-                   owningObject:(id) newObject
+- (void)transcodeArrayProperty:(NSArray *)array
+            objectPropertyName:(NSString *)objectPropertyName
+                  owningObject:(id)newObject
 {
     if (array && [array count] >0){
         NSDictionary *propertyMappings = [[newObject class] propertyTypeMap];
@@ -185,10 +180,10 @@
 }
 
 //Transcode a dictionary, either a JSON dictionary (appropriate for NSJSONSerialization) or a dictionary that contains model objects.
-- (void) transcodeDictionaryProperty:(NSDictionary *) dict
-                  objectPropertyName:(NSString *) objectPropertyName
-                     dictionaryClass:(Class) type
-                        owningObject:(id) newObject
+- (void)transcodeDictionaryProperty:(NSDictionary *)dict
+                 objectPropertyName:(NSString *)objectPropertyName
+                    dictionaryClass:(Class)type
+                       owningObject:(id)newObject
 {
     if (![type isSubclassOfClass:[NSDictionary class]])
     {
@@ -228,11 +223,11 @@
 /*
  Given a property name, the type it should be, and the parent who owns this property, it will transcode your jsonObject (array, or dictionary representation) into the expected property value
  */
-- (void) transcodeProperty:(id)jsonObject
-              objectPropertyName:(NSString *) objectPropertyName
-              JSONpropertyName:(NSString *) JSONpropertyName
-              propertyType:(Class) type
-              owningObject:(id) newObject
+- (void)transcodeProperty:(id)jsonObject
+       objectPropertyName:(NSString *)objectPropertyName
+         JSONpropertyName:(NSString *)JSONpropertyName
+             propertyType:(Class)type
+             owningObject:(id)newObject
 {
     id propertyValue = [jsonObject objectForKey:JSONpropertyName];
     //bail on null
@@ -265,7 +260,6 @@
                JSONpropertyName:JSONpropertyName
                    propertyType:type
                    owningObject:newObject];
-        
     }else{
         if ((optionMask & JLDeserializerReportNilProperties) != NO)
         {
@@ -279,7 +273,7 @@
 /*
  If your JSON has more fields in it than you were expecting, this will report the extras (can happen with old app, new api)
  */
--(NSArray *)reportExtraJSONFields:(id)jsonObj classProperties:(NSDictionary *)collectedProperties
+- (NSArray *)reportExtraJSONFields:(id)jsonObj classProperties:(NSDictionary *)collectedProperties
 {
     NSMutableSet *jsonProperties;
     if (![jsonObj isKindOfClass:[NSDictionary class]]){
@@ -304,12 +298,12 @@
 
 #pragma mark - Deserialization options
 
-- (BOOL) isReportTimers
+- (BOOL)isReportTimers
 {
     return optionMask | JLDeserializerReportTimers;
 }
 
-- (BOOL) isVerbose
+- (BOOL)isVerbose
 {
     return optionMask | JLDeserializerVerboseOutput;
 }

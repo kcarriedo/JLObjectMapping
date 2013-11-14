@@ -18,9 +18,9 @@ typedef NS_OPTIONS(NSInteger, JLSerializerOptionMask) {
 
 @interface JLObjectSerializer : JLTranscodingBase
 
--(id)initWithSerializerOptions:(JLSerializerOptionMask)options;
+- (id)initWithSerializerOptions:(JLSerializerOptionMask)options;
 
--(id)JSONObjectWithObject:(NSObject *)object;
--(NSString *)JSONStringWithObject:(NSObject *)object;
+- (id)JSONObjectWithObject:(NSObject *)object;
+- (NSString *)JSONStringWithObject:(NSObject *)object;
 
 @end

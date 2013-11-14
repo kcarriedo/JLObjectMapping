@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 
 @interface SimpleTestMappingObject : NSObject
-@property (nonatomic) NSInteger integer;
-@property (nonatomic, strong) NSDictionary *dictionary;
-@property (nonatomic, strong) NSDictionary *dictionaryOfSimpleObjects;
-@property (nonatomic, strong) SimpleTestMappingObject *testMappingObject;
-@property (nonatomic, strong) NSArray *arrayOfTestObjects;
+@property (nonatomic, assign)NSInteger integer;
+@property (nonatomic, strong)NSDictionary *dictionary;
+@property (nonatomic, strong)NSDictionary *dictionaryOfSimpleObjects;
+@property (nonatomic, strong)SimpleTestMappingObject *testMappingObject;
+@property (nonatomic, strong)NSArray *arrayOfTestObjects;
 
 @end

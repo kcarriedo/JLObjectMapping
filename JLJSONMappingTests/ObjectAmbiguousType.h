@@ -10,6 +10,6 @@
 
 @interface ObjectAmbiguousType : NSObject
 
-@property (nonatomic, strong) NSDictionary *someDictionary;
-@property (nonatomic, strong) NSArray *someArray;
+@property (nonatomic, strong)NSDictionary *someDictionary;
+@property (nonatomic, strong)NSArray *someArray;
 @end

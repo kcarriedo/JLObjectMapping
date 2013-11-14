@@ -35,12 +35,12 @@
     return @{};
 }
 
--(void)didDeserialize:(NSDictionary *)jsonDictionary
+- (void)didDeserialize:(NSDictionary *)jsonDictionary
 {
     
 }
 
--(void)willSerialize
+- (void)willSerialize
 {
     
 }

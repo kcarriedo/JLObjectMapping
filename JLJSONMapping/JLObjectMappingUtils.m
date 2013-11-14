@@ -10,7 +10,7 @@
 
 @implementation JLObjectMappingUtils
 
-+ (BOOL) isBasicType:(id)obj
++ (BOOL)isBasicType:(id)obj
 {
     if ([obj isKindOfClass:[NSString class]]){
         return YES;
@@ -25,7 +25,7 @@
 
 
 
-+ (Class) classFromPropertyProperties:(NSString*) propertiesString
++ (Class)classFromPropertyProperties:(NSString*)propertiesString
 {
 //    CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
     NSArray *attributes = [propertiesString componentsSeparatedByString:@","];
@@ -51,7 +51,7 @@
 /*
  Returns the Type for a given property
  */
-+ (BOOL) isValueType:(NSString *) propertyProperties
++ (BOOL)isValueType:(NSString *)propertyProperties
 {
     NSArray *attributes = [propertyProperties componentsSeparatedByString:@","];
     NSString *propertyType = [attributes objectAtIndex:1];

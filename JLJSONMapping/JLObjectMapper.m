@@ -33,23 +33,23 @@
     return self;
 }
 
--(NSString *)JSONStringWithObject:(NSObject *)object
+- (NSString *)JSONStringWithObject:(NSObject *)object
 {
     return [serializer JSONStringWithObject:object];
 }
 
--(id)JSONObjectWithObject:(NSObject *)object
+- (id)JSONObjectWithObject:(NSObject *)object
 {
     return [serializer JSONObjectWithObject:object];
 }
 
 
--(id) objectWithJSONObject:(id) obj targetClass:(Class) class
+- (id)objectWithJSONObject:(id)obj targetClass:(Class)class
 {
     return [deserializer objectWithJSONObject:obj targetClass:class];
 }
 
--(id) objectWithString:(NSString *) objectString targetClass:(Class) class
+- (id)objectWithString:(NSString *)objectString targetClass:(Class)class
 {
     return [deserializer objectWithString:objectString targetClass:class];
 }

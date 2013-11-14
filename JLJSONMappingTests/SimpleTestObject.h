@@ -25,37 +25,37 @@
 //unsigned long long
 //unsigned short
 
-@property (nonatomic) bool pBoolean;
-@property (nonatomic) char pChar;
-@property (nonatomic) BOOL boolean;
-@property (nonatomic) double pDouble;
-@property (nonatomic) float pFloat;
-@property (nonatomic) int pInt;
-@property (nonatomic) long pLong;
-@property (nonatomic) long long pLongLong;
-@property (nonatomic) short pShort;
-@property (nonatomic) unsigned char pUnsignedChar;
-@property (nonatomic) unsigned int pUnsignedInt;
-@property (nonatomic) unsigned long pUnsignedLong;
-@property (nonatomic) unsigned long long pUnsignedLongLong;
-@property (nonatomic) unsigned short pUnsignedShort;
+@property (nonatomic)bool pBoolean;
+@property (nonatomic)char pChar;
+@property (nonatomic)BOOL boolean;
+@property (nonatomic)double pDouble;
+@property (nonatomic)float pFloat;
+@property (nonatomic)int pInt;
+@property (nonatomic)long pLong;
+@property (nonatomic)long long pLongLong;
+@property (nonatomic)short pShort;
+@property (nonatomic)unsigned char pUnsignedChar;
+@property (nonatomic)unsigned int pUnsignedInt;
+@property (nonatomic)unsigned long pUnsignedLong;
+@property (nonatomic)unsigned long long pUnsignedLongLong;
+@property (nonatomic)unsigned short pUnsignedShort;
 
-@property (nonatomic) int16_t pInt16;
-@property (nonatomic) int32_t pInt32;
-@property (nonatomic) int64_t pInt64;
-@property (nonatomic) CGFloat cgfloat;
-@property (nonatomic) NSInteger integer;
-@property (nonatomic) NSUInteger uInteger;
-@property (nonatomic, strong) NSNumber *number;
-@property (nonatomic, strong) NSDate *date;
-@property (nonatomic, strong) NSString *string;
+@property (nonatomic)int16_t pInt16;
+@property (nonatomic)int32_t pInt32;
+@property (nonatomic)int64_t pInt64;
+@property (nonatomic)CGFloat cgfloat;
+@property (nonatomic)NSInteger integer;
+@property (nonatomic)NSUInteger uInteger;
+@property (nonatomic, strong)NSNumber *number;
+@property (nonatomic, strong)NSDate *date;
+@property (nonatomic, copy)NSString *string;
 
 
 //this is used after deserialization and will contain the serialzed version of this object
 //don't set anything in it.
-@property (strong, nonatomic) NSString *deserializedResult;
+@property (nonatomic, copy)NSString *deserializedResult;
 
-+ (SimpleTestObject*) newSimpleTestObject;
++ (SimpleTestObject*)newSimpleTestObject;
 
 
 
