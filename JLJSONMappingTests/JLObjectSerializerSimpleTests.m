@@ -48,7 +48,7 @@
     [arrayObject setDictionary:@{@"turtles":@"huh?"}];
     [simpleObject setArrayOfTestObjects:@[arrayObject]];
     
-    NSString *json = [serializer JSONStringWithObject:simpleObject];
+    NSString *json =@"{\"myDictionary\":{\"turtles\":\"nope\"},\"someOtherNameOfInteger\":12345,\"dictionaryOfSimpleTestMappingObjects\":{\"oneObject\":{\"someOtherNameOfInteger\":101,\"myDictionary\":{\"turtles\":\"yup\"}}},\"array\":[{\"someOtherNameOfInteger\":202,\"myDictionary\":{\"turtles\":\"huh?\"}}]}";;
     SimpleTestMappingObject *transcodedObject = [deserializer objectWithString:json targetClass:[SimpleTestMappingObject class]];
     
     //test that simple properties can be transcoded

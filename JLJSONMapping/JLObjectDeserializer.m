@@ -300,12 +300,12 @@
 
 - (BOOL)isReportTimers
 {
-    return optionMask | JLDeserializerReportTimers;
+    return optionMask & JLDeserializerReportTimers;
 }
 
 - (BOOL)isVerbose
 {
-    return optionMask | JLDeserializerVerboseOutput;
+    return optionMask & JLDeserializerVerboseOutput;
 }
 
 @end
