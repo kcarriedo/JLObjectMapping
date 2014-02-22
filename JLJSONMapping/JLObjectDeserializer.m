@@ -107,17 +107,7 @@
          [NSException raise:@"Class has no properties, can't deserialize" format:@"Class %@ missing properties", class];
     }
     if ([collectedProperties count]>0 && obj){
-        NSArray *extras = [self reportExtraJSONFields:obj classProperties:collectedProperties];
-        if ([extras count]>0){
-            if ((optionMask & JLDeserializerReportMissingProperties) != NO)
-            {
-                NSLog(@"JSON object representing a %@ contained extra field(s):%@\n full object graph:\n%@", class, extras, obj);
-            }
-            if ((optionMask & JLDeserializerIgnoreMissingProperties) == NO)
-            {
-                [NSException raise:@"JSON to Object mismatch, JSON has extra fields" format:@"Class %@ missing properties: %@", class, extras];
-            }
-        }
+        [self reportExtraJSONFields:obj classProperties:collectedProperties targetClass:class];
     }
     NSDictionary *propertyNameMap = [class propertyNameMap];
     [collectedProperties enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
@@ -171,9 +161,14 @@
                 [NSException raise:@"Ambiguous array of objects, missing propertyTypeMap for property" format:@"Property name:%@", objectPropertyName];
             }
             for (id someObject in array) {
-                if ([JLObjectMappingUtils isBasicType:someObject]){
-                    [newArray addObject:someObject];
+                if (![JLObjectMappingUtils isBasicType:someObject]){
+                    NSLog(@"Can't transcode object in array:%@, no mapping defined.\nobjectPropertyName:%@, someObject:%@, newObject:%@", someObject, objectPropertyName, someObject,newObject);
+                    NSLog(@"Can't transcode object in array, because no mapping is defined.\nobjectPropertyName:%@, parent object:%@, \nobject data:%@\n", objectPropertyName, newObject, someObject);
+                    if (optionMask & JLDeserializerErrorOnAmbiguousType){
+                        [NSException raise:@"Ambiguous array of objects, missing propertyTypeMap for property" format:@"Property name:%@, parent object type:%@", objectPropertyName, [newObject class]];
+                    }
                 }
+                [newArray addObject:someObject];
             }
         }
     }
@@ -207,8 +202,11 @@
                 if ([JLObjectMappingUtils isBasicType:obj]){
                     [newDictionary setObject:obj forKey:key];
                 }else{
-                    //if no, then we're hosed.
-                    NSLog(@"Can't transcode object in dictionary with key:%@, no mapping defined", key);
+                    NSLog(@"Can't transcode object in dictionary:%@, no mapping defined.\nobjectPropertyName:%@, someObject:%@, newObject:%@", obj, objectPropertyName, obj,newObject);
+                    NSLog(@"Can't transcode object in dictionary, because no mapping is defined.\nobjectPropertyName:%@, parent object:%@, \nobject data:%@\n", objectPropertyName, newObject, obj);
+                    if (optionMask & JLDeserializerErrorOnAmbiguousType){
+                        [NSException raise:@"Ambiguous dictionary of objects, missing propertyTypeMap for property" format:@"Property name:%@, parent object type:%@", objectPropertyName, [newObject class]];
+                    }
                 }
             }];
         }else{
@@ -273,28 +271,45 @@
 /*
  If your JSON has more fields in it than you were expecting, this will report the extras (can happen with old app, new api)
  */
-- (NSArray *)reportExtraJSONFields:(id)jsonObj classProperties:(NSDictionary *)collectedProperties
+- (void)reportExtraJSONFields:(id)jsonObj classProperties:(NSDictionary *)collectedProperties targetClass:(Class)class
 {
+    if ((optionMask & JLDeserializerIgnoreMissingProperties) && !(optionMask & JLDeserializerReportMissingProperties)){
+        //short circuit out of here, usually production cases (ignoring missing properties and don't want to report anything)
+        return;
+    }
+    NSDictionary *extraMappings = [class propertyTypeMap];
     NSMutableSet *jsonProperties;
     if (![jsonObj isKindOfClass:[NSDictionary class]]){
-        NSLog(@"JSON object isn't a dictionary, can't report extra data from json. This will be an exception in the future. Please fix.");
-        return nil;
+        NSLog(@"jsonObj isn't a dictionary, can't report extra data from json");
+        return;
     }
-    //Might be able to remove this
+    
     jsonProperties = [[NSMutableSet alloc] init];
     [collectedProperties enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         [jsonProperties addObject:key];
     }];
-    //and just search through dictionary
+    
     NSMutableArray *extras = [[NSMutableArray alloc] init];
-    [(NSDictionary*)jsonObj enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+    ///TODO: account for duplicates, as in, data that shows up for a given property as well as the same property but from the mapped property in extraMappings
+    [(NSDictionary *)jsonObj enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         if (![jsonProperties containsObject:key]){
-            [extras addObject:key];
+            if (![extraMappings objectForKey:key])
+            {
+                [extras addObject:key];
+            }
         }
     }];
-    return [extras copy];
+    if ([extras count]>0){
+        if ((optionMask & JLDeserializerReportMissingProperties) != NO)
+        {
+            NSLog(@"JSON object representing a %@ contained extra field(s):%@\n full object graph:\n%@", class, extras, jsonObj);
+        }
+        if ((optionMask & JLDeserializerIgnoreMissingProperties) == NO)
+        {
+            [NSException raise:@"JSON to Object mismatch, JSON has extra fields" format:@"Class %@ missing properties: %@", class, extras];
+        }
+    }
 }
-
 
 #pragma mark - Deserialization options
 

@@ -53,11 +53,55 @@
 - (NSString *)JSONStringWithObject:(NSObject *)object
 {
     id jsonObject = [self JSONObjectWithObject:object];
-    NSError *error;
-    NSData *jsonData= [NSJSONSerialization dataWithJSONObject:jsonObject options:0 error:&error];
-    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    NSString *jsonString;
+    if (optionMask & JLSerializerUseNSJSONSerilizer){
+        //you probably don't want this...
+        NSError *error;
+        NSData *jsonData= [NSJSONSerialization dataWithJSONObject:jsonObject options:0 error:&error];
+        if (error){
+            NSLog(@"There was an error serializing your object:%@\n%@", [error localizedDescription], jsonObject);
+            return nil;
+        }
+        jsonString= [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }else{
+        jsonString = [self JSONStringFromJSONObject:jsonObject];
+    }
     return jsonString;
 }
+
+- (NSString *)JSONStringFromJSONObject:(NSObject *)jsonObject
+{
+    NSMutableString *jsonString;
+    if ([JLObjectMappingUtils isBasicType:jsonObject]){
+        jsonString = [[NSMutableString alloc] initWithString:[JLObjectMappingUtils stringForBasicType:jsonObject]];
+    }else if ([jsonObject isKindOfClass:[NSDictionary class]]){
+        jsonString = [[NSMutableString alloc] initWithString:@"{"];
+        [(NSDictionary *)jsonObject enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            [jsonString appendString:[NSString stringWithFormat:@"\"%@\":%@,", key, [self JSONStringFromJSONObject:obj]]];
+        }];
+        NSRange range = {[jsonString length]-1,1};
+        [jsonString deleteCharactersInRange:range];
+        [jsonString appendString:@"}"];
+    }else if ([jsonObject isKindOfClass:[NSArray class]]){
+        jsonString = [[NSMutableString alloc] initWithString:@"["];
+        [(NSArray *)jsonObject enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            [jsonString appendString:[NSString stringWithFormat:@"%@,",[self JSONStringFromJSONObject:obj]]];
+        }];
+        NSRange range = {[jsonString length]-1,1};
+        [jsonString deleteCharactersInRange:range];
+        [jsonString appendString:@"]"];
+    }else if ([jsonObject isKindOfClass:[NSSet class]]){
+        jsonString = [[NSMutableString alloc] initWithString:@"["];
+        [(NSSet *)jsonObject enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+            [jsonString appendString:[NSString stringWithFormat:@"%@,",[self JSONStringFromJSONObject:obj]]];
+        }];
+        NSRange range = {[jsonString length]-1,1};
+        [jsonString deleteCharactersInRange:range];
+        [jsonString appendString:@"]"];
+    }
+    return jsonString;
+}
+
 
 //primary entry point (api, sorts out object)
 - (id)JSONObjectWithObject:(NSObject *)object
@@ -191,8 +235,7 @@
                     }
                     [newJSONDictionary setObject:propertyJSONValue forKey:propertyKey];
                 }
-            }else
-            {
+            }else{
                 [self logVerbose:[NSString stringWithFormat:@"nil value for property:%@ on class:%@\n", propertyKey, currentClassName]];
             }
         }];
@@ -201,20 +244,11 @@
 }
 
 #pragma mark - Serialization options
-- (BOOL)isVerbose
-{
+- (BOOL)isVerbose{
     return (optionMask & JLSerializerVerboseOutput) != NO;
 }
 
-- (BOOL)isReportTimers
-{
+- (BOOL)isReportTimers{
     return (optionMask & JLSerializerReportTimers) != NO;
-}
-
-#pragma mark - generic class stuff
-
-- (void)dealloc
-{
-    classPropertiesNameMap = nil;
 }
 @end

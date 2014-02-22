@@ -23,8 +23,6 @@
     }
 }
 
-
-
 + (Class)classFromPropertyProperties:(NSString*)propertiesString
 {
 //    CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
@@ -60,4 +58,17 @@
     }
     return NO;
 }
+
+//returns the string representation of a basic object
++ (NSString *)stringForBasicType:(NSObject *)object
+{
+    if ([object isKindOfClass:[NSString class]]){
+        return [NSString stringWithFormat:@"\"%@\"", object];
+    }else if ([object isKindOfClass:[NSNumber class]]){
+        return [NSString stringWithFormat:@"%@", object];
+    }else{
+        return @"null";
+    }
+}
+
 @end

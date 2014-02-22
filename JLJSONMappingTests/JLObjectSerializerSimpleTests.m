@@ -69,13 +69,20 @@
 }
 
 
-- (void)testFullObjectTranscode
+- (void)testFullObjectTranscodeNSJSONSerializer
+{
+    SimpleTestObject *newObject = [SimpleTestObject newSimpleTestObject];
+    serializer = [[JLObjectSerializer alloc] initWithSerializerOptions:JLSerializerDefaultOptionsMask | JLSerializerUseNSJSONSerilizer];
+    NSString *objectData = [serializer JSONStringWithObject:newObject];
+    STAssertTrue([objectData isEqualToString:@"{\"pBoolean\":true,\"boolean\":1,\"pLongLong\":9223372036854775806,\"string\":\"hey there, I'm a test string, here have some unicode: Ω≈ç√∫˜µœ∑´®†¥¨ˆøπ“‘æ…¬˚∆˙©ƒ∂ßåΩ≈ç√∫˜µ≤≥÷™£¢∞§¶•ªº\",\"pInt64\":9223372036854775806,\"cgfloat\":3.402823e+38,\"pInt16\":32766,\"pUnsignedChar\":254,\"date\":\"2009-02-13T15:31:30.012 -0800\",\"pLong\":2147483646,\"uInteger\":4294967294,\"pUnsignedLong\":4294967294,\"number\":9223372036854775806,\"pUnsignedShort\":65534,\"integer\":2147483646,\"pUnsignedInt\":4294967294,\"pChar\":42,\"pDouble\":1.797693134862316e+308,\"pInt\":2147483646,\"pInt32\":2147483646,\"pFloat\":3.402823e+38,\"pShort\":32766,\"pUnsignedLongLong\":18446744073709551614}"], @"Simple object default values weren't set properly in the resulting JSON");
+}
+
+- (void)testFullObjectTranscodeCustomSerializer
 {
     SimpleTestObject *newObject = [SimpleTestObject newSimpleTestObject];
     NSString *objectData = [serializer JSONStringWithObject:newObject];
-    STAssertTrue([objectData isEqualToString:@"{\"pBoolean\":true,\"boolean\":1,\"pLongLong\":9223372036854775806,\"string\":\"hey there, I'm a test string, here have some unicode: Ω≈ç√∫˜µœ∑´®†¥¨ˆøπ“‘æ…¬˚∆˙©ƒ∂ßåΩ≈ç√∫˜µ≤≥÷™£¢∞§¶•ªº\",\"pInt64\":9223372036854775806,\"cgfloat\":3.402823e+38,\"pInt16\":32766,\"pUnsignedChar\":254,\"date\":\"02-13-2009 T15:31:30.012 -0800\",\"pLong\":2147483646,\"uInteger\":4294967294,\"pUnsignedLong\":4294967294,\"number\":9223372036854775806,\"pUnsignedShort\":65534,\"integer\":2147483646,\"pUnsignedInt\":4294967294,\"pChar\":42,\"pDouble\":1.797693134862316e+308,\"pInt\":2147483646,\"pInt32\":2147483646,\"pFloat\":3.402823e+38,\"pShort\":32766,\"pUnsignedLongLong\":18446744073709551614}"], @"Simple object default values weren't set properly in the resulting JSON");
+    STAssertTrue([objectData isEqualToString:@"{\"pBoolean\":1,\"boolean\":1,\"pLongLong\":9223372036854775806,\"string\":\"hey there, I'm a test string, here have some unicode: Ω≈ç√∫˜µœ∑´®†¥¨ˆøπ“‘æ…¬˚∆˙©ƒ∂ßåΩ≈ç√∫˜µ≤≥÷™£¢∞§¶•ªº\",\"pInt64\":9223372036854775806,\"cgfloat\":3.402823e+38,\"pInt16\":32766,\"pUnsignedChar\":254,\"date\":\"2009-02-13T15:31:30.012 -0800\",\"pLong\":2147483646,\"uInteger\":4294967294,\"pUnsignedLong\":4294967294,\"number\":9223372036854775806,\"pUnsignedShort\":65534,\"integer\":2147483646,\"pUnsignedInt\":4294967294,\"pChar\":42,\"pDouble\":1.797693134862316e+308,\"pInt\":2147483646,\"pInt32\":2147483646,\"pFloat\":3.402823e+38,\"pShort\":32766,\"pUnsignedLongLong\":18446744073709551614}"], @"Simple object default values weren't set properly in the resulting JSON");
 }
-
 
 
 //Sanity test

@@ -13,13 +13,13 @@
 typedef NS_OPTIONS(NSInteger, JLSerializerOptionMask) {
     JLSerializerVerboseOutput = 1 << 0,
     JLSerializerReportTimers = 1 << 1,
+    JLSerializerUseNSJSONSerilizer = 1 << 2,
     JLSerializerDefaultOptionsMask = 0x0
 };
 
 @interface JLObjectSerializer : JLTranscodingBase
 
 - (id)initWithSerializerOptions:(JLSerializerOptionMask)options;
-
 - (id)JSONObjectWithObject:(NSObject *)object;
 - (NSString *)JSONStringWithObject:(NSObject *)object;
 

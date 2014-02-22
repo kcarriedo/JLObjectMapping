@@ -13,4 +13,5 @@
 + (Class)classFromPropertyProperties:(NSString *)propertiesString;
 + (BOOL)isBasicType:(id)obj;
 + (BOOL)isValueType:(NSString *)propertyProperties;
++ (NSString *)stringForBasicType:(NSObject *)object;
 @end
