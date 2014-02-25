@@ -24,14 +24,26 @@ Implement this method if your JSON objects have properties that map to different
 
 **\+ (NSDateFormatter *)dateFormatterForPropertyNamed:(NSString*)propertyName;**
 Implement this method if you pass dates around. Right now only passing dates as a string is supported (not as a Long, yet). Return a dateformatter object you that matches the date string you are expecting for the given property.
-An example would be if you have a property named "endDate", you would return @{@"endDate":<my dateformatter here>}
+An example would be if you have a property named "endDate", you would implement something like this:
 
+ (NSDateFormatter *)dateFormatterForPropertyNamed:(NSString *)propertyName{
+ 
+    static NSDictionary *formatters;
+    dispatch_once...{
+      NSDateFormatter *dateFormatterForEndDate = ...
+      NSDateFormatter *dateFormattedForStartDate = ...
+      formatters = @{@"endDate":dateFormatterForEndDate,
+             @"startDate": dateFormattedForStartDate};
+             }
+    return [formatters objectForKey:propertyName];
+</code>  
+}
 
 **Serialization and Deserialization callbacks**
 JLObjectMapping currently supports two callbacks:
 
 **\-(void)didDeserialize:(NSDictionary *)jsonDictionary;** Called after a JSON object or JSONString was deserialized into an object. The receiving object is the new object created. 
-This allows you to massage your date further, if needed.
+This allows you to massage your data further, if needed.
 
 **\-(void)willSerialize;** Called before serialization on the object you are about to serialize. This allows you to massage your data or do validation before serialization.
 
